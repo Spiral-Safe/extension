@@ -1,0 +1,25 @@
+{
+  "name": "spiral-safe-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack/webpack.prod.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/wallet-standard-features": "^1.2.0",
+    "@solana/web3.js": "^1.91.0",
+    "@spiralsafe/wallet-adapter": "file:../spiral-safe"
+  },
+  "devDependencies": {
+    "chrome-types": "^0.1.271",
+    "copy-webpack-plugin": "^12.0.2",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-merge": "^5.10.0"
+  }
+}
