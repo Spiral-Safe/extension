@@ -1,15 +1,34 @@
 import { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-standard-features';
 import { Keypair, PublicKey, SendOptions, Transaction, TransactionSignature, VersionedTransaction } from '@solana/web3.js';
-import { initialize } from '@spiralsafe/wallet-adapter';
-import { SpiralSafe as ISpiralSafe, SpiralSafeEvent } from '@spiralsafe/wallet-adapter';
+import { initialize, SpiralSafe as ISpiralSafe, SpiralSafeEvent } from '@spiralsafe/wallet-adapter';
+
+console.log("Content Script Running");
 
 class SpiralSafe implements ISpiralSafe {
     constructor() {
-        this.publicKey = Keypair.generate().publicKey
+        if (new.target === SpiralSafe) {
+            Object.freeze(this);
+        }
+        this.#publicKey = (new Keypair()).publicKey;
+        this.#isConnected = false;
     }
-    publicKey: PublicKey | null;
+    #publicKey?: PublicKey;
+    #isConnected: boolean;
+
+    public get publicKey() {
+        return this.#publicKey ?? null;
+    }
+
     connect(options?: { onlyIfTrusted?: boolean }): Promise<{ publicKey: PublicKey }> {
-        return Promise.resolve({ publicKey: this.publicKey as PublicKey });
+        if (this.#publicKey) {
+            this.#connect((this.#publicKey as PublicKey).toBase58(), "");
+            return Promise.resolve({ publicKey: this.#publicKey as PublicKey });
+        }
+        return Promise.resolve({ publicKey: new Keypair().publicKey });
+    }
+    #connect(publicKey: string, connectionUrl: string) {
+        this.#isConnected = true;
+        this.#publicKey = new PublicKey(publicKey);
     }
     disconnect(): Promise<void> {
         return Promise.resolve();
@@ -41,11 +60,12 @@ class SpiralSafe implements ISpiralSafe {
     }
 }
 
+console.log("Content Script Initializing");
 const spiralSafe = new SpiralSafe();
-initialize(spiralSafe);
 try {
     Object.defineProperty(window, 'spiralSafe', { value: spiralSafe });
 }
 catch (error) {
     console.error(error);
 }
+initialize(spiralSafe);

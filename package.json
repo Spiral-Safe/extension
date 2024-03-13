@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-features": "^1.2.0",
     "@solana/web3.js": "^1.91.0",
     "@spiralsafe/wallet-adapter": "file:../spiral-safe"
