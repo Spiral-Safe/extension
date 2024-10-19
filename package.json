@@ -12,8 +12,10 @@
   "dependencies": {
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-features": "^1.2.0",
+    "@solana/wallet-standard-util": "^1.1.1",
     "@solana/web3.js": "^1.91.0",
-    "@spiralsafe/wallet-adapter": "file:../wallet-adapter"
+    "@spiralsafe/wallet-adapter": "file:../wallet-adapter",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.278",
