@@ -13,10 +13,10 @@
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-features": "^1.2.0",
     "@solana/web3.js": "^1.91.0",
-    "@spiralsafe/wallet-adapter": "file:../spiral-safe"
+    "@spiralsafe/wallet-adapter": "file:../wallet-adapter"
   },
   "devDependencies": {
-    "chrome-types": "^0.1.271",
+    "@types/chrome": "^0.0.278",
     "copy-webpack-plugin": "^12.0.2",
     "ts-loader": "^9.5.1",
     "webpack": "^5.90.3",

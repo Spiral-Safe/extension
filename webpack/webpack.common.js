@@ -9,6 +9,7 @@ module.exports = {
     //   options: path.join(srcDir, 'options.tsx'),
     background: path.join(srcDir, "background.ts"),
     content: path.join(srcDir, "content.ts"),
+    inject: path.join(srcDir, "inject.ts"),
   },
   output: {
     path: path.join(__dirname, "../dist"),
