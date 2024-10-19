@@ -13,7 +13,8 @@ h1 {
   margin-top: 20px;
 }
 
-#loginContainer, #extensionContainer {
+#loginContainer,
+#extensionContainer {
   max-width: 400px;
   margin: 50px auto;
   padding: 30px;
@@ -38,8 +39,6 @@ input[type="text"] {
 }
 
 button {
-  display: inline-block;
-  width: 100%;
   padding: 12px;
   background-color: #2980b9;
   color: #ffffff;
@@ -49,10 +48,49 @@ button {
   cursor: pointer;
 }
 
+/* Hover effect for buttons */
 button:hover {
   background-color: #1f618d;
 }
 
+/* Make the extension container a flexbox */
+#extensionContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Specific styles for the sign button */
+#sign {
+  background-color: #27ae60; /* Green */
+  flex: 1;
+  margin-right: 10px;
+}
+
+#sign:hover {
+  background-color: #219150;
+}
+
+/* Specific styles for the signOut button */
+#signOut {
+  background-color: #e74c3c; /* Red */
+  flex: 1;
+  margin-left: 10px;
+}
+
+#signOut:hover {
+  background-color: #c0392b;
+}
+
+/* Hide elements with the hidden class */
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+/* Style for the public key display */
+#publicKeyDisplay {
+  font-size: 16px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  word-break: break-all; /* Ensure long keys wrap to the next line */
 }
