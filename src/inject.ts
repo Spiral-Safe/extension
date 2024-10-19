@@ -62,29 +62,71 @@ export class SpiralSafe implements ISpiralSafe {
     }
     async signIn(input?: SolanaSignInInput): Promise<SolanaSignInOutput> {
         console.log("Sign In", input);
-        const { publicKey, secretKey } = (this.#keypair ||= new Keypair());
-        const domain = input?.domain || window.location.host;
-        const address = input?.address || publicKey.toBase58();
-
-        const signedMessage = createSignInMessage({
-            ...input,
-            domain,
-            address,
-        });
-        const signature = nacl.sign.detached(signedMessage, secretKey);
-
-        this.#connect(address, "");
-
-        return {
-            account: {
-                address,
-                publicKey: publicKey.toBytes(),
-                chains: [],
-                features: [],
+        // Send a message to the extension to open the extension page
+        window.postMessage(
+            {
+                type: "OPEN_EXTENSION_PAGE",
+                sender: "spiralSafe",
+                payload: input,
             },
-            signedMessage,
-            signature,
-        };
+            "*"
+        );
+
+        // Return a Promise that resolves when the response is received from the extension
+        return new Promise((resolve, reject) => {
+            const handleMessage = (event: MessageEvent) => {
+                console.log("handleMessage", event);
+                // Verify that the message is from the extension
+                if (event.source !== window) return;
+
+                const message = event.data;
+                // Check the message type and sender
+                if (
+                    message &&
+                    message.type === "SPIRALSAFE_KEYPAIR_RESPONSE" &&
+                    message.sender === "spiralSafeExtension"
+                ) {
+                    // Extract the keypair data from the message payload
+                    console.log("received keypair", new Uint8Array(message.payload).length);
+                    this.#keypair = Keypair.fromSecretKey(new Uint8Array(message.payload));
+
+                    const domain = input?.domain || window.location.host;
+                    const address = input?.address || this.#keypair.publicKey.toBase58();
+
+                    // Create a signed message
+                    const signedMessage = createSignInMessage({
+                        ...input,
+                        domain,
+                        address,
+                    });
+                    const signature = nacl.sign.detached(signedMessage, this.#keypair.secretKey);
+
+                    this.#connect(address, "");
+
+                    // Resolve the promise with the sign-in output
+                    resolve({
+                        account: {
+                            address,
+                            publicKey: this.#keypair.publicKey.toBytes(),
+                            chains: [],
+                            features: [],
+                        },
+                        signedMessage,
+                        signature,
+                    });
+                    window.removeEventListener("message", handleMessage);
+                }
+            };
+
+            // Add an event listener to listen for messages from the extension
+            window.addEventListener("message", handleMessage);
+
+            // Optional: Set a timeout to reject the promise if no response is received
+            setTimeout(() => {
+                window.removeEventListener("message", handleMessage);
+                reject(new Error("Timeout waiting for keypair response from extension"));
+            }, 30000); // Timeout after 30 seconds
+        });
     }
 
     on<E extends keyof SpiralSafeEvent>(event: E, listener: SpiralSafeEvent[E], context?: any): void {

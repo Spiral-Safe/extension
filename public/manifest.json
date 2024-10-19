@@ -5,7 +5,8 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "./hello.html",
-    "default_icon": "./hello_extensions.png"
+    "default_icon": "./hello_extensions.png",
+    "default_title": "Spiral Safe"
   },
   "content_scripts": [
     {
@@ -13,7 +14,8 @@
       "run_at": "document_start",
       "exclude_globs": ["*chrome-extension*"],
       "js": ["content.js"],
-      "all_frames": true
+      "all_frames": true,
+      "css": ["styles.css"]
     }
   ],
   "web_accessible_resources": [
@@ -21,5 +23,14 @@
       "resources": ["inject.js"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "runtime",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
 }

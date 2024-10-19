@@ -1,6 +1,22 @@
 <html>
+  <head>
+    <!-- Include Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
   <body>
     <h1>Spiral Safe Extension</h1>
-    <script src="./background.js"></script>
+    <div id="loginContainer">
+      <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    <div id="extensionContainer" class="hidden">
+      <button id="sign" type="button">Sign</button>
+    </div>
+    <!-- <script src="./background.js"></script> -->
+    <script src="./home.js"></script>
   </body>
 </html>
