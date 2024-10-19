@@ -5,10 +5,12 @@ document.getElementById('loginForm')?.addEventListener('submit', function (event
 
     const username = (document.getElementById('username') as HTMLInputElement)?.value;
 
-    // Mock registration by storing the username
-    localStorage.setItem('username', username);
-    const keypair = new Keypair();
-    localStorage.setItem('secretKey', JSON.stringify(Array.from(keypair.secretKey)));
+    if (!localStorage.getItem('secretKey')) {
+        // Mock registration by storing the username
+        localStorage.setItem('username', username);
+        const keypair = new Keypair();
+        localStorage.setItem('secretKey', JSON.stringify(Array.from(keypair.secretKey)));
+    }
 
     document.getElementById('loginContainer')?.classList.add('hidden');
     document.getElementById('extensionContainer')?.classList.remove('hidden');
@@ -21,8 +23,6 @@ document.getElementById('sign')?.addEventListener('click', function () {
         payload: secretKeyArray,
         sender: 'spiralSafeExtension'
     });
-    localStorage.removeItem('username');
-    localStorage.removeItem('secretKey');
     document.getElementById('loginContainer')?.classList.remove('hidden');
     document.getElementById('extensionContainer')?.classList.add('hidden');
     window.close();
@@ -34,4 +34,4 @@ setInterval(() => {
         document.getElementById('loginContainer')?.classList.add('hidden');
         document.getElementById('extensionContainer')?.classList.remove('hidden');
     }
-}, 500);
+}, 100);
